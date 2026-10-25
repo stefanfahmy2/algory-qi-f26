@@ -1,0 +1,49 @@
+Q1  strike 100, premium 6
+    kind            S=80   S=100   S=120
+    long_call      -6.00   -6.00   14.00
+    long_put       14.00   -6.00   -6.00
+    short_call      6.00    6.00  -14.00
+    short_put     -14.00    6.00    6.00
+
+Q3  ticker: SPY
+    expiry: 2026-11-27 (33 days out)
+    spot:   759.97
+    calls:  123, puts: 114
+
+Q4  2026-11-27: 119 of 123 calls kept (4 zero bid, 0 ask below intrinsic)
+      strike       mid  intrinsic  extrinsic
+       755.0    19.450      4.970     14.480
+       756.0    18.765      3.970     14.795
+       757.0    18.080      2.970     15.110
+       758.0    17.405      1.970     15.435
+       759.0    16.740      0.970     15.770
+       760.0    16.080      0.000     16.080
+       761.0    15.450      0.000     15.450
+       762.0    14.815      0.000     14.815
+       763.0    14.200      0.000     14.200
+       764.0    13.575      0.000     13.575
+
+Q5  largest extrinsic: 16.080 at strike 760.0
+    spot for comparison: 759.97
+    mean extrinsic for strikes <= 80% of spot: 3.275
+    lowest strike 510.0: extrinsic 2.985, interest on strike at 4.03% = 1.856, bid-ask spread 2.71
+
+Q6  long expiry: 2027-06-17 (235 days out)
+    166 of 217 calls kept (38 zero bid, 13 ask below intrinsic)
+      strike       mid  intrinsic  extrinsic
+       735.0    69.425     24.970     44.455
+       740.0    65.780     19.970     45.810
+       745.0    62.200     14.970     47.230
+       750.0    58.770      9.970     48.800
+       755.0    55.065      4.970     50.095
+       760.0    51.755      0.000     51.755
+       765.0    48.795      0.000     48.795
+       770.0    45.555      0.000     45.555
+       775.0    42.405      0.000     42.405
+       780.0    39.405      0.000     39.405
+
+    largest extrinsic, 2026-11-27: 16.080 at strike 760.0
+    largest extrinsic, 2027-06-17: 51.755 at strike 760.0
+    ratio 3.22, sqrt of time ratio 2.67
+    implied vol at strike 760.0: 17.5% (2026-11-27), 21.6% (2027-06-17)
+    long curve above short at 57 of 57 shared strikes
