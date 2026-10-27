@@ -1,0 +1,67 @@
+Q1  spot 100; premiums are Black-Scholes, T = 0.25 years, r = 4%, vol = 25%
+    calls: 100 = 5.47, 105 = 3.35, 110 = 1.92    puts: 95 = 2.43, 100 = 4.48
+    per share (x100 for one contract)
+    position            max profit    max loss  break-evens
+    Covered call              8.35      -96.65  96.65
+    Protective put       unlimited       -7.43  102.43
+    Long straddle        unlimited       -9.95  90.05, 109.95
+    Bull call spread          6.45       -3.55  103.55
+
+Q2  calendar spread, strike 100: buy 3-month call 5.47, sell 1-week call 1.42, net debit 4.05
+    one week later, underlying unchanged at 100:
+      short leg expires worthless: +1.42
+      long leg now worth 5.24, lost 0.23
+      spread P&L +1.19 per share
+
+Q3  S=100, K=100, T=1, r=4%, vol=25%
+    call 11.8370   put 7.9160
+    C - P = 3.9211,  S - K*exp(-rT) = 3.9211
+
+Q4  feed Black-Scholes prices back into implied_volatility
+    call K=100  vol 0.2500 -> price  11.8370 -> implied 0.2500
+    put  K=100  vol 0.2500 -> price   7.9160 -> implied 0.2500
+    put  K=100  vol 0.4000 -> price  13.6572 -> implied 0.4000
+    call K=120  vol 0.1800 -> price   2.3561 -> implied 0.1800
+
+Q5  SPY calls, expiry 2026-11-27 (32 days), spot 765.37, rate 4.03% (13-week T-bill)
+    123 calls, 0 zero bid, 0 with a mid below the no-arbitrage floor (no volatility fits), 123 solved
+    implied vol at strike 765.0 (nearest spot): 14.53%  (put at the same strike: 14.65%; yfinance's own call figure: 16.12%)
+    VIX today: 18.39  (17.1 on 2026-09-14)
+      strike  % of spot       mid  implied vol
+       610.0      79.7%   158.190       38.96%
+       650.0      84.9%   118.730       32.13%
+       690.0      90.2%    79.700       25.43%
+       725.0      94.7%    46.805       20.06%
+       765.0     100.0%    14.695       14.53%
+       785.0     102.6%     4.890       12.46%
+       804.0     105.0%     1.175       11.68%
+       825.0     107.8%     0.230       11.99%
+    lowest implied vol 11.62% at strike 810.0; highest 54.31% at strike 510.0
+
+Q6  30 trading days of log returns, 2026-09-15 to 2026-10-26
+      realised vol   ATM implied     VIX     gap
+            10.49%        14.53%  18.39%   4.03%
+
+Q7  2005-01-07 to 2026-09-18, 1093 Fridays: VIX above the next month's realised vol 82% of the time, by 4.17% at the median
+    selling a 1-week ATM straddle every Friday, priced at VIX, 1097 weeks, P&L as % of spot:
+      wins 69% of weeks; average win 1.10%, average loss -1.17%; mean week +0.400%
+      premium averages 2.13% of spot, which is the most any week can make
+      cumulative +438.3% of spot; deepest drawdown -26.2%, bottoming in the week to 2020-04-17
+      five worst weeks:
+        week to 2008-10-10: premium 4.99%, P&L -14.81%, = 7.0 average weeks of premium
+        week to 2020-02-28: premium 1.89%, P&L -9.27%, = 4.4 average weeks of premium
+        week to 2020-04-17: premium 7.31%, P&L -8.18%, = 3.8 average weeks of premium
+        week to 2020-03-20: premium 6.39%, P&L -8.16%, = 3.8 average weeks of premium
+        week to 2025-04-04: premium 2.39%, P&L -6.67%, = 3.1 average weeks of premium
+      sold on margin at L x capital, the worst week costs L x 14.81%: 3x -> -44%, 5x -> -74%, 7x -> -104%; the account is gone above 6.8x
+    selling a 1-week ATM straddle every Friday, priced at 0.79 x VIX (today's ATM / VIX ratio), 1097 weeks, P&L as % of spot:
+      wins 57% of weeks; average win 0.86%, average loss -1.24%; mean week -0.047%
+      premium averages 1.68% of spot, which is the most any week can make
+      cumulative -51.7% of spot; deepest drawdown -78.2%, bottoming in the week to 2025-05-23
+      five worst weeks:
+        week to 2008-10-10: premium 3.94%, P&L -15.85%, = 9.4 average weeks of premium
+        week to 2020-04-17: premium 5.78%, P&L -9.72%, = 5.8 average weeks of premium
+        week to 2020-02-28: premium 1.49%, P&L -9.67%, = 5.8 average weeks of premium
+        week to 2020-03-20: premium 5.05%, P&L -9.50%, = 5.7 average weeks of premium
+        week to 2025-04-04: premium 1.89%, P&L -7.18%, = 4.3 average weeks of premium
+      sold on margin at L x capital, the worst week costs L x 15.85%: 3x -> -48%, 5x -> -79%, 7x -> -111%; the account is gone above 6.3x
