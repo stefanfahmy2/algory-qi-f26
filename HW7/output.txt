@@ -1,0 +1,76 @@
+Q1  SPY daily closes 2011-11-03 to 2026-11-02: 3770 trading days
+    feature table shape (3709, 7)  (first 60 days are warm-up, last day has no label)
+    columns: ['ret_1d', 'ret_5d', 'ret_20d', 'ret_60d', 'vol_20d', 'px_vs_ma50', 'next_day_return']
+    first three rows:
+                 ret_1d    ret_5d  ret_20d  ret_60d  vol_20d  px_vs_ma50  next_day_return
+    2012-02-01 0.008757 -0.000679 0.038980 0.055922 0.075342    0.052642         0.001585
+    2012-02-02 0.001585  0.006066 0.038997 0.064086 0.075341    0.052392         0.014019
+    2012-02-03 0.014019  0.020634 0.050766 0.072337 0.086737    0.064505        -0.000669
+
+    hand check, row 1000 (2016-01-25), close 157.7995:
+      ret_1d  = close 2016-01-25 / close 2016-01-22 - 1 = 157.7995 / 160.2216 - 1 = -0.015117
+      ret_5d  = close 2016-01-25 / close 2016-01-15 - 1 = 157.7995 / 157.9426 - 1 = -0.000905
+      ret_20d = close 2016-01-25 / close 2015-12-23 - 1 = 157.7995 / 173.2566 - 1 = -0.089215
+      ret_60d = close 2016-01-25 / close 2015-10-27 - 1 = 157.7995 / 172.7164 - 1 = -0.086366
+      vol_20d = stdev of the 20 daily returns 2015-12-24..2016-01-25 x sqrt(252) = 0.205077
+      px_vs_ma50 = close / mean(closes 2015-11-11..2016-01-25) - 1 = -0.068319
+      label   = close 2016-01-26 / close 2016-01-25 - 1 = +0.013644
+    every feature reads closes up to 2016-01-25 and none after;
+    only the label reads 2016-01-26. Matches build_features exactly.
+
+Q2  split by time, 60/20/20, no shuffling (dates are the day the features are read)
+    training   2012-02-01 to 2020-12-02    2225 rows
+    validation 2020-12-03 to 2023-11-14     742 rows
+    test       2023-11-15 to 2026-10-30     742 rows
+
+Q3  R-squared predicting next-day return
+    model                 training  validation
+    linear regression       0.0287     -0.0298
+    ridge (alpha=1)         0.0287     -0.0297
+    random forest           0.8424     -0.0371
+    gradient boosting       0.4549     -0.1199
+
+Q4  one hyperparameter each, chosen on validation R-squared
+    ridge             alpha = 3.162e+04 validation R2 0.0005
+    random forest     max_depth = 1     validation R2 -0.0021
+    gradient boosting n_estimators = 1  validation R2 -0.0007
+
+Q5  best on validation: ridge, alpha=3.162e+04 (validation R2 0.0005)
+    test set, run once: R2 0.0026   corr(predicted, actual) +0.1043
+    predicted up on 99.9% of test days; directional accuracy 56.6% vs 56.5% of test days actually up
+
+Q6  hold SPY when the prediction is positive, cash otherwise; test period 2023-11-15 to 2026-11-02
+                         annualised  max drawdown  invested    total
+    model rule               22.41%       -18.76%     99.9%    81.4%
+    buy and hold             20.56%       -18.76%    100.0%    73.4%
+    linear (unselected)      14.40%       -14.37%     63.1%    48.6%
+    model rule in cash on 2025-04-09 (that day +10.50%), missing 2025-04-10 (-4.38%)
+
+Q7  linear regression on standardised features: coefficient per 1 s.d. move, ranked by size
+    ret_1d        -17.28 bp
+    ret_60d        -5.73 bp
+    vol_20d        +3.20 bp
+    px_vs_ma50     +3.01 bp
+    ret_5d         +2.50 bp
+    ret_20d        -1.07 bp
+    chosen ridge (alpha=3.162e+04), same scale:
+    ret_1d         -1.05 bp
+    ret_60d        -0.42 bp
+    px_vs_ma50     -0.36 bp
+    ret_5d         -0.27 bp
+    vol_20d        +0.27 bp
+    ret_20d        -0.26 bp
+    random forest (max_depth=1) importances, ranked:
+    ret_1d         0.503
+    ret_60d        0.240
+    px_vs_ma50     0.130
+    ret_5d         0.087
+    ret_20d        0.033
+    vol_20d        0.007
+    gradient boosting (n_estimators=1) importances, ranked:
+    ret_1d         0.580
+    px_vs_ma50     0.226
+    ret_5d         0.194
+    ret_20d        0.000
+    ret_60d        0.000
+    vol_20d        0.000
