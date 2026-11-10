@@ -1,0 +1,98 @@
+Q1  SPY daily closes 2006-11-09 to 2026-11-09: 5030 trading days (unadjusted closes, the price an option actually settles on)
+    N = 21: 5009 windows
+    mean +0.8282%   std 4.7152%   1st percentile -14.81%   99th percentile +11.24%
+    worst window -33.14% (starting 2020-02-21), best window +25.19% (starting 2020-03-23)
+
+Q2  21-day returns: skewness -1.188, excess kurtosis 5.873  (above zero, so fatter tails than normal)
+    daily returns:  skewness -0.008, excess kurtosis 14.547
+    the 1st percentile sits -3.32 std from the mean and the 99th +2.21 (a normal gives -2.33 and +2.33)
+
+Q3  spot 760.88, strike 783.71 (3% above spot), 21 days, undiscounted
+    historical call 5.3618
+    historical put  21.8863
+    call - put = -16.52;  spot - strike = -22.83;  spot x mean return = +6.30;  those two sum to -16.52
+    discounting at 4.035% for 21 trading days multiplies by 0.99664: call 5.3438 (-0.0180), put 21.8129 (-0.0735)
+    with dividend-adjusted closes instead: call 5.7344, put 21.0856
+
+Q4  fraction of the 5009 windows finishing in the money at strike 783.71:
+    call 31.02%   put 68.98%
+
+Q5  Black-Scholes inputs: realised vol over the last 60 days 14.80%, rate 4.035% (13-week T-bill, 2026-11-09), T = 21/252 years
+    contract    historical  Black-Scholes   hist - BS    % diff
+    call            5.3618         5.4374     -0.0756     -1.4%
+    put            21.8863        25.6330     -3.7467    -14.6%
+    % diff is (historical - Black-Scholes) / Black-Scholes
+    call - put: historical -16.52, Black-Scholes -20.20, no-arbitrage value spot - strike x discount -20.20
+    same contracts at r = 0: Black-Scholes call 4.7790, put 27.6054
+
+Q6  strikes from 15% below spot to 15% above, in 1% steps
+      strike  % spot |  call hist   call BS     diff |  put hist    put BS     diff      % diff
+      646.75     85% |    120.877   116.303   +4.574 |     0.443     0.000   +0.443   +123,852%
+      654.36     86% |    113.348   108.721   +4.627 |     0.523     0.001   +0.522    +45,958%
+      661.97     87% |    105.826   101.140   +4.686 |     0.609     0.003   +0.606    +18,202%
+      669.57     88% |     98.315    93.562   +4.752 |     0.707     0.009   +0.698     +7,720%
+      677.18     89% |     90.822    85.993   +4.829 |     0.823     0.023   +0.800     +3,506%
+      684.79     90% |     83.362    78.440   +4.922 |     0.973     0.054   +0.919     +1,712%
+      692.40     91% |     75.939    70.922   +5.018 |     1.158     0.118   +1.040       +881%
+      700.01     92% |     68.590    63.464   +5.126 |     1.418     0.244   +1.174       +482%
+      707.62     93% |     61.328    56.110   +5.218 |     1.764     0.473   +1.291       +273%
+      715.23     94% |     54.174    48.921   +5.253 |     2.219     0.867   +1.352       +156%
+      722.84     95% |     47.181    41.975   +5.206 |     2.835     1.505   +1.331        +88%
+      730.44     96% |     40.409    35.368   +5.040 |     3.672     2.481   +1.191        +48%
+      738.05     97% |     33.883    29.203   +4.680 |     4.755     3.899   +0.856        +22%
+      745.66     98% |     27.682    23.579   +4.103 |     6.162     5.858   +0.304         +5%
+      753.27     99% |     21.877    18.580   +3.297 |     7.966     8.443   -0.476         -6%
+      760.88    100% |     16.582    14.264   +2.318 |    10.280    11.709   -1.430        -12%
+      768.49    101% |     11.959    10.651   +1.309 |    13.266    15.680   -2.414        -15%
+      776.10    102% |      8.197     7.726   +0.471 |    17.113    20.338   -3.225        -16%
+      783.71    103% |      5.362     5.437   -0.076 |    21.886    25.633   -3.747        -15%
+      791.32    104% |      3.461     3.710   -0.249 |    27.595    31.489   -3.894        -12%
+      798.92    105% |      2.250     2.452   -0.202 |    33.993    37.815   -3.822        -10%
+      806.53    106% |      1.505     1.570   -0.065 |    40.856    44.515   -3.659         -8%
+      814.14    107% |      1.043     0.973   +0.070 |    48.003    51.502   -3.499         -7%
+      821.75    108% |      0.728     0.584   +0.145 |    55.297    58.695   -3.399         -6%
+      829.36    109% |      0.511     0.339   +0.173 |    62.689    66.034   -3.345         -5%
+      836.97    110% |      0.363     0.190   +0.172 |    70.149    73.469   -3.320         -5%
+      844.58    111% |      0.256     0.104   +0.152 |    77.651    80.965   -3.314         -4%
+      852.19    112% |      0.186     0.055   +0.131 |    85.190    88.500   -3.310         -4%
+      859.79    113% |      0.134     0.028   +0.106 |    92.747    96.056   -3.309         -3%
+      867.40    114% |      0.099     0.014   +0.085 |   100.320   103.625   -3.305         -3%
+      875.01    115% |      0.071     0.007   +0.064 |   107.901   111.201   -3.300         -3%
+    call: largest dollar disagreement at strike 715.23 (94% of spot): historical 54.174, Black-Scholes 48.921, difference +5.253
+    put: largest dollar disagreement at strike 791.32 (104% of spot): historical 27.595, Black-Scholes 31.489, difference -3.894
+    overall, in dollars: the call struck at 715.23 (94% of spot), by +5.253
+    deep out-of-the-money puts, in proportion: at strike 646.75 (85% of spot) historical 0.443 against Black-Scholes 0.000358, a ratio of 1,240 to 1
+
+    Black-Scholes vol that reproduces each historical out-of-the-money price (60-day realised is 14.80%):
+       85% of spot (put ): 28.26%
+       90% of spot (put ): 22.79%
+       95% of spot (put ): 17.87%
+      100% of spot (put ): 13.16%
+      105% of spot (call): 14.40%
+      110% of spot (call): 16.32%
+      115% of spot (call): 18.42%
+
+Q7  how much independent evidence sits in the tails (21-day windows, strikes as a % move from spot)
+    5009 overlapping windows contain about 240 non-overlapping ones
+    below -15%: 49 windows (0.98%), 4 distinct episodes, about 2.3 independent windows (non-overlapping counts run 1 to 4 depending on the start day)
+        2008-09-05 to 2008-12-04:  21 windows, extreme -30.5%
+        2009-01-28 to 2009-03-11:   8 windows, extreme -19.5%
+        2011-07-08 to 2011-08-22:   3 windows, extreme -16.5%
+        2020-02-06 to 2020-04-03:  17 windows, extreme -33.1%
+    below -20%: 22 windows (0.44%), 2 distinct episodes, about 1.0 independent windows (non-overlapping counts run 0 to 2 depending on the start day)
+        2008-09-08 to 2008-10-27:  12 windows, extreme -30.5%
+        2020-02-11 to 2020-03-25:  10 windows, extreme -33.1%
+    above +20%: 3 windows (0.06%), 2 distinct episodes, about 0.1 independent windows (non-overlapping counts run 0 to 1 depending on the start day)
+        2009-03-05 to 2009-04-06:   2 windows, extreme +22.5%
+        2020-03-23 to 2020-04-22:   1 windows, extreme +25.2%
+    chance of finishing more than 15% down: history 0.978%, Black-Scholes at 14.80% vol 0.0056% (-3.86 std)
+    standard error on the 0.44% chance of a 20% fall: 0.093% if the windows were independent, 0.427% using the non-overlapping count
+    prices 20% out of the money:
+      put at 80% of spot: historical 0.1851, Black-Scholes 2.95e-07; non-overlapping windows alone give 0.0000 to 0.6182 depending on the start day
+      call at 120% of spot: historical 0.0136, Black-Scholes 1.08e-04; non-overlapping windows alone give 0.0000 to 0.1651 depending on the start day
+
+Check yourself
+    trading days 5030 (about 5,030)
+    21-day windows 5009 (about 5,010)
+    daily excess kurtosis 14.55 (well above 3)
+    call - put -16.52 against spot - strike -22.83; the +6.30 gap is exactly spot x the mean 21-day return
